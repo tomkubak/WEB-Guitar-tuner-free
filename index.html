@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ladička</title>
+<style>
+:root{--bg:#0d0f14;--card:#161a22;--acc:#22e3a1;--warn:#ffb020;--bad:#ff4d6d;--txt:#e8ecf3;--mut:#7c8597}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(circle at 50% 0,#1b2230,var(--bg));color:var(--txt);font-family:system-ui,sans-serif;min-height:100vh;display:flex;justify-content:center;padding:20px}
+.app{width:100%;max-width:520px}
+h1{text-align:center;font-weight:300;letter-spacing:4px;margin-bottom:16px}
+.card{background:var(--card);border-radius:20px;padding:20px;margin-bottom:16px;box-shadow:0 10px 40px #0006}
+.note{text-align:center;font-size:96px;font-weight:700;line-height:1;transition:color .2s}
+.note sub{font-size:32px;color:var(--mut)}
+.info{display:flex;justify-content:space-between;color:var(--mut);margin-top:8px;font-variant-numeric:tabular-nums}
+canvas{width:100%;display:block}
+.strings{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.str{flex:1;min-width:60px;padding:12px 0;border-radius:12px;border:2px solid #2a3140;background:#1d222d;color:var(--txt);font-size:18px;font-weight:600;cursor:pointer;transition:.2s}
+.str.active{border-color:var(--acc);box-shadow:0 0 16px var(--acc)}
+.str.done{background:#173a2e}
+.row{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+select,button.main{background:#1d222d;color:var(--txt);border:1px solid #2a3140;border-radius:10px;padding:10px;font-size:15px}
+button.main{background:var(--acc);color:#04130d;font-weight:700;border:none;width:100%;padding:16px;font-size:18px;cursor:pointer}
+label{color:var(--mut);font-size:14px}
+.status{text-align:center;margin-top:10px;height:24px;font-weight:600}
+</style>
+</head>
+<body>
+<div class="app">
+<h1>LADIČKA</h1>
+<div class="card">
+ <div class="note" id="note">–<sub id="oct"></sub></div>
+ <div class="info"><span id="freq">0.00 Hz</span><span id="cents">0 centů</span></div>
+ <canvas id="gauge" width="480" height="220"></canvas>
+ <div class="status" id="status"></div>
+ <canvas id="hist" width="480" height="80"></canvas>
+</div>
+<div class="card">
+ <div class="strings" id="strings"></div>
+ <div class="row">
+  <label>Ladění</label>
+  <select id="tuning"></select>
+  <label>A4</label>
+  <select id="a4"></select>
+  <label><input type="checkbox" id="auto" checked> Auto</label>
+ </div>
+</div>
+<button class="main" id="start">Spustit mikrofon</button>
+</div>
+<script>
+const NOTES=['C','C#','D','D#','E','F','F#','G','G#','A','A#','H'];
+const TUNINGS={
+ 'Standard (E A D G H E)':['E2','A2','D3','G3','H3','E4'],
+ 'Drop D':['D2','A2','D3','G3','H3','E4'],
+ 'DADGAD':['D2','A2','D3','G3','A3','D4'],
+ 'Open G':['D2','G2','D3','G3','H3','D4'],
+ 'Open D':['D2','A2','D3','F#3','A3','D4'],
+ 'Půltón dolů':['D#2','G#2','C#3','F#3','A#3','D#4'],
+ 'Celý tón dolů':['D2','G2','C3','F3','A3','D4']};
+let A4=440,ctx,analyser,buf,selected=0,smoothF=0,needle=0,history=[],done=new Set(),inTuneSince=0;
+const $=id=>document.getElementById(id);
+for(const t in TUNINGS)$('tuning').add(new Option(t,t));
+for(let f=430;f<=450;f++)$('a4').add(new Option(f+' Hz',f,f==440,f==440));
+const midiOf=n=>{const m=n.match(/^([A-H]#?)(\d)$/);return NOTES.indexOf(m[1])+12*(+m[2]+1)};
+const freqOf=m=>A4*Math.pow(2,(m-69)/12);
+const tuning=()=>TUNINGS[$('tuning').value];
+function renderStrings(){const s=$('strings');s.innerHTML='';tuning().forEach((n,i)=>{const b=document.createElement('button');b.className='str'+(i==selected?' active':'')+(done.has(i)?' done':'');b.textContent=n.replace(/\d/,'');b.onclick=()=>{selected=i;$('auto').checked=false;playRef(i);renderStrings()};s.appendChild(b)})}
+$('tuning').onchange=()=>{done.clear();renderStrings()};
+$('a4').onchange=e=>A4=+e.target.value;
+renderStrings();
+function playRef(i){if(!ctx)ctx=new AudioContext();const f=freqOf(midiOf(tuning()[i])),t=ctx.currentTime,g=ctx.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.3,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+2.5);g.connect(ctx.destination);[1,2,3].forEach((h,k)=>{const o=ctx.createOscillator();o.type=k?'sine':'triangle';o.frequency.value=f*h;const gg=ctx.createGain();gg.gain.value=1/(h*h);o.connect(gg).connect(g);o.start(t);o.stop(t+2.6)})}
+// YIN detekce
+function yin(b,sr){const N=b.length/2,d=new Float32Array(N);let rms=0;for(const v of b)rms+=v*v;if(Math.sqrt(rms/b.length)<.01)return -1;
+ for(let t=1;t<N;t++){let s=0;for(let i=0;i<N;i++){const x=b[i]-b[i+t];s+=x*x}d[t]=s}
+ d[0]=1;let run=0;for(let t=1;t<N;t++){run+=d[t];d[t]=d[t]*t/run}
+ let tau=-1;for(let t=20;t<N;t++){if(d[t]<.12){while(t+1<N&&d[t+1]<d[t])t++;tau=t;break}}
+ if(tau<0)return -1;const a=d[tau-1],c=d[tau],e=d[tau+1]||c;const p=tau+(a-e)/(2*(a-2*c+e));return sr/p}
+$('start').onclick=async()=>{try{if(!ctx)ctx=new AudioContext();await ctx.resume();const st=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});const src=ctx.createMediaStreamSource(st);const hp=ctx.createBiquadFilter();hp.type='highpass';hp.frequency.value=60;analyser=ctx.createAnalyser();analyser.fftSize=4096;buf=new Float32Array(analyser.fftSize);src.connect(hp).connect(analyser);$('start').textContent='Poslouchám…';$('start').disabled=true;loop()}catch(e){alert('Mikrofon není dostupný: '+e.message)}};
+function loop(){analyser.getFloatTimeDomainData(buf);const f=yin(buf,ctx.sampleRate);let cents=null;
+ if(f>60&&f<1200){smoothF=smoothF&&Math.abs(f-smoothF)/smoothF<.05?smoothF*.8+f*.2:f;
+  const t=tuning();if($('auto').checked){let best=0,bd=1e9;t.forEach((n,i)=>{const dd=Math.abs(1200*Math.log2(smoothF/freqOf(midiOf(n)))) ;if(dd<bd){bd=dd;best=i}});if(best!=selected){selected=best;renderStrings()}}
+  const target=freqOf(midiOf(t[selected]));cents=1200*Math.log2(smoothF/target);
+  const m=Math.round(12*Math.log2(smoothF/A4)+69);$('note').firstChild.textContent=NOTES[m%12];$('oct').textContent=Math.floor(m/12)-1;
+  $('freq').textContent=smoothF.toFixed(2)+' Hz';$('cents').textContent=(cents>0?'+':'')+cents.toFixed(1)+' centů';
+  const ac=Math.abs(cents),col=ac<3?'var(--acc)':ac<15?'var(--warn)':'var(--bad)';$('note').style.color=col;
+  $('status').textContent=ac<3?'✔ Naladěno':cents<0?'▲ Přitáhni':'▼ Povol';$('status').style.color=col;
+  if(ac<3){if(!inTuneSince)inTuneSince=performance.now();else if(performance.now()-inTuneSince>800&&!done.has(selected)){done.add(selected);navigator.vibrate&&navigator.vibrate(80);renderStrings()}}else inTuneSince=0;
+ }
+ history.push(cents);if(history.length>120)history.shift();
+ const tgt=cents==null?needle*.95:Math.max(-50,Math.min(50,cents));needle+=(tgt-needle)*.25;draw();requestAnimationFrame(loop)}
+function draw(){const c=$('gauge'),g=c.getContext('2d'),W=c.width,H=c.height,cx=W/2,cy=H-20,R=180;g.clearRect(0,0,W,H);
+ for(let i=-50;i<=50;i+=5){const a=(i/50)*Math.PI/3-Math.PI/2,big=i%25==0,r1=R-(big?22:12);g.strokeStyle=Math.abs(i)<=5?'#22e3a1':'#3a4256';g.lineWidth=big?3:1.5;g.beginPath();g.moveTo(cx+Math.cos(a)*r1,cy+Math.sin(a)*r1);g.lineTo(cx+Math.cos(a)*R,cy+Math.sin(a)*R);g.stroke()}
+ const a=(needle/50)*Math.PI/3-Math.PI/2,ok=Math.abs(needle)<3;g.strokeStyle=ok?'#22e3a1':'#fff';g.shadowColor=g.strokeStyle;g.shadowBlur=ok?20:6;g.lineWidth=4;g.lineCap='round';g.beginPath();g.moveTo(cx,cy);g.lineTo(cx+Math.cos(a)*(R-8),cy+Math.sin(a)*(R-8));g.stroke();g.shadowBlur=0;g.fillStyle='#fff';g.beginPath();g.arc(cx,cy,8,0,7);g.fill();
+ const h=$('hist'),hg=h.getContext('2d');hg.clearRect(0,0,h.width,h.height);hg.strokeStyle='#2a3140';hg.beginPath();hg.moveTo(0,40);hg.lineTo(h.width,40);hg.stroke();hg.strokeStyle='#22e3a1';hg.lineWidth=2;hg.beginPath();let pen=false;history.forEach((v,i)=>{if(v==null){pen=false;return}const x=i*h.width/120,y=40-Math.max(-50,Math.min(50,v))*.75;pen?hg.lineTo(x,y):hg.moveTo(x,y);pen=true});hg.stroke()}
+draw();
+</script>
+</body>
+</html>
