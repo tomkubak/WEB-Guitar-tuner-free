@@ -3,203 +3,297 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ladička · parní ladicí přístroj</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=IM+Fell+English+SC&family=Special+Elite&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#1d110a">
+<title>Kytarová ladička</title>
 <style>
-:root{--brass1:#f3d58a;--brass2:#c9993f;--brass3:#7a5420;--ink:#2b1a0e;--paper:#efe0bc;--ok:#46e070;--amber:#ffb347;--blood:#c0392b}
+:root{--font:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;--brass1:#f3d58a;--brass2:#c9993f;--brass3:#7a5420;--ink:#2b1a0e;--paper:#efe0bc;--muted:#c9a46a;--ok:#46e070;--amber:#ffb347}
 *{box-sizing:border-box;margin:0;padding:0}
-body{min-height:100vh;background:radial-gradient(ellipse at 50% 15%,#4a2e1c 0%,#1d110a 65%,#0b0604 100%);color:var(--paper);font-family:'IM Fell English SC',Georgia,serif;display:flex;justify-content:center;padding:18px 16px 40px;overflow-x:hidden}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.35;background-image:repeating-radial-gradient(circle at 30% 40%,#0000 0 2px,#0003 3px 4px),repeating-linear-gradient(45deg,#ffffff06 0 1px,#0000 1px 6px)}
-.gear{position:fixed;pointer-events:none;opacity:.13;z-index:0;fill:var(--brass2)}
+body{min-height:100vh;background:radial-gradient(ellipse at 50% 15%,#4a2e1c 0%,#1d110a 65%,#0b0604 100%);color:var(--paper);font-family:var(--font);display:flex;justify-content:center;padding:18px 16px 40px;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.3;background-image:repeating-radial-gradient(circle at 30% 40%,#0000 0 2px,#0003 3px 4px),repeating-linear-gradient(45deg,#ffffff06 0 1px,#0000 1px 6px)}
+.gear{position:fixed;pointer-events:none;opacity:.12;z-index:0;fill:var(--brass2)}
 #gearA{top:-90px;left:-90px;width:300px;height:300px}
 #gearB{bottom:-70px;right:-70px;width:230px;height:230px}
 .app{position:relative;z-index:1;width:100%;max-width:540px}
-h1{font-family:'Cinzel Decorative',serif;text-align:center;font-size:clamp(28px,8vw,42px);letter-spacing:3px;background:linear-gradient(180deg,var(--brass1),var(--brass2) 55%,var(--brass3));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 0 #000b)}
-.sub{text-align:center;color:#c9a46a;font-size:14px;letter-spacing:4px;margin:2px 0 14px}
-.plate{position:relative;border-radius:22px;padding:18px;margin-bottom:16px;background:linear-gradient(145deg,#5b3a1e,#3a2312 40%,#2a180c);border:3px solid var(--brass3);box-shadow:inset 0 0 0 2px #e9c27a44,inset 0 2px 12px #000c,0 12px 30px #000c;transition:box-shadow .4s}
+h1{text-align:center;font-size:clamp(26px,7vw,34px);font-weight:800;letter-spacing:.5px;background:linear-gradient(180deg,var(--brass1),var(--brass2) 60%,var(--brass3));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 0 #000b)}
+.sub{text-align:center;color:var(--muted);font-size:15px;margin:4px 0 16px}
+.plate{position:relative;border-radius:20px;padding:20px 18px;margin-bottom:16px;background:linear-gradient(145deg,#5b3a1e,#3a2312 40%,#2a180c);border:3px solid var(--brass3);box-shadow:inset 0 0 0 2px #e9c27a44,inset 0 2px 12px #000c,0 12px 30px #000c;transition:box-shadow .4s}
 .plate.tuned{box-shadow:inset 0 0 0 2px #e9c27a44,inset 0 2px 12px #000c,0 12px 30px #000c,0 0 34px #46e07055}
-.rivet{position:absolute;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff6d0,var(--brass2) 40%,var(--brass3) 80%);box-shadow:0 1px 2px #000}
+.rivet{position:absolute;width:11px;height:11px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff6d0,var(--brass2) 40%,var(--brass3) 80%);box-shadow:0 1px 2px #000}
 .tl{top:8px;left:8px}.tr{top:8px;right:8px}.bl{bottom:8px;left:8px}.br{bottom:8px;right:8px}
+h2{font-size:15px;font-weight:700;color:var(--brass1);margin-bottom:12px;text-align:center}
 #gauge{width:100%;aspect-ratio:1;display:block}
-.status{text-align:center;font-size:24px;letter-spacing:2px;height:32px;margin-top:4px;color:#d8c39a;transition:color .2s,text-shadow .2s}
+.status{text-align:center;font-size:22px;font-weight:700;min-height:30px;margin-top:6px;color:#d8c39a;transition:color .2s,text-shadow .2s}
 .status.ok{color:#9dffb5;text-shadow:0 0 12px var(--ok)}
 .status.near{color:var(--amber)}
 .status.far{color:#ff8a70}
-.zoom{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;flex-wrap:wrap}
-.zoom span{color:#c9a46a;letter-spacing:2px;margin-right:4px}
-.btn{font-family:'Special Elite',monospace;font-size:15px;color:var(--ink);padding:8px 12px;border-radius:9px;border:2px solid var(--brass3);background:linear-gradient(#f6dc98,#c9993f);box-shadow:inset 0 1px 0 #fff9,0 3px 0 #4a3010,0 5px 8px #000a;cursor:pointer;transition:transform .08s,box-shadow .08s}
+.status.weak{color:#9fb3ff;font-size:17px}
+.zoom{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.zoom>span{color:var(--muted);font-size:14px;margin-right:2px}
+.btn{font-family:var(--font);font-size:14px;font-weight:600;color:var(--ink);padding:8px 12px;border-radius:9px;border:2px solid var(--brass3);background:linear-gradient(#f6dc98,#c9993f);box-shadow:inset 0 1px 0 #fff9,0 3px 0 #4a3010,0 5px 8px #000a;cursor:pointer;transition:transform .08s,box-shadow .08s}
 .btn.on{transform:translateY(3px);background:linear-gradient(#c9993f,#e8c57a);box-shadow:inset 0 2px 5px #0007,0 0 12px #ffb34799}
 .tape{border-radius:8px;overflow:hidden;border:2px solid var(--brass3);box-shadow:inset 0 0 10px #0008}
 #hist{width:100%;height:90px;display:block}
-.label{color:#c9a46a;letter-spacing:2px;font-size:14px;margin-bottom:8px;text-align:center}
 .pegs{display:flex;gap:10px;justify-content:center}
-.peg{flex:1;max-width:70px;aspect-ratio:1;border-radius:50%;border:none;cursor:pointer;position:relative;font-family:'Cinzel Decorative',serif;font-size:19px;color:var(--ink);background:radial-gradient(circle at 35% 30%,#fff3c4,#d9ad55 35%,#8a6024 75%,#4a3010);box-shadow:inset 0 -3px 6px #0007,inset 0 2px 3px #fff8,0 4px 8px #000a;transition:transform .15s,box-shadow .25s}
+.peg{flex:1;min-width:0;max-width:68px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1;padding:0;aspect-ratio:1;border-radius:50%;border:none;cursor:pointer;position:relative;font-family:var(--font);font-size:20px;font-weight:800;color:var(--ink);background:radial-gradient(circle at 35% 30%,#fff3c4,#d9ad55 35%,#8a6024 75%,#4a3010);box-shadow:inset 0 -3px 6px #0007,inset 0 2px 3px #fff8,0 4px 8px #000a;transition:transform .15s,box-shadow .25s}
+.peg small{display:block;font-size:11px;font-weight:700;opacity:.6;line-height:1;margin-top:1px}
 .peg:active{transform:scale(.93)}
 .peg.active{box-shadow:inset 0 -3px 6px #0007,inset 0 2px 3px #fff8,0 0 0 3px #ffd98a,0 0 20px #ffb347}
 .peg::after{content:"";position:absolute;top:5%;right:5%;width:20%;height:20%;border-radius:50%;background:#3a2010;box-shadow:inset 0 1px 2px #000}
 .peg.done::after{background:radial-gradient(circle,#e0ffe6,var(--ok) 50%,#137a2b);box-shadow:0 0 10px var(--ok)}
 .peg.steam::before{content:"";position:absolute;left:50%;top:0;width:34px;height:34px;margin-left:-17px;border-radius:50%;background:#fff;filter:blur(9px);opacity:0;animation:steam 1.3s ease-out}
 @keyframes steam{0%{opacity:.85;transform:translateY(0) scale(.4)}100%{opacity:0;transform:translateY(-70px) scale(2.4)}}
-.controls{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.field{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted)}
+.field.wide{grid-column:1/-1}
 .sel{position:relative}
 .sel::after{content:"▾";position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--ink);pointer-events:none}
-select{appearance:none;-webkit-appearance:none;font-family:'Special Elite',monospace;font-size:15px;color:var(--ink);padding:8px 28px 8px 10px;border-radius:9px;border:2px solid var(--brass3);background:linear-gradient(#f6dc98,#c9993f);box-shadow:inset 0 1px 0 #fff9,0 3px 6px #0008;cursor:pointer}
-.lever{display:flex;align-items:center;gap:8px;cursor:pointer;color:#d8c39a}
+select{width:100%;appearance:none;-webkit-appearance:none;font-family:var(--font);font-size:15px;color:var(--ink);padding:9px 28px 9px 10px;border-radius:9px;border:2px solid var(--brass3);background:linear-gradient(#f6dc98,#c9993f);box-shadow:inset 0 1px 0 #fff9,0 3px 6px #0008;cursor:pointer;text-overflow:ellipsis}
+.lever{display:flex;align-items:center;gap:10px;cursor:pointer;color:#e2cfa6;font-size:15px}
 .lever input{display:none}
-.lever i{width:46px;height:24px;border-radius:12px;background:#1a0f08;box-shadow:inset 0 2px 4px #000;position:relative;transition:background .2s}
+.lever i{flex:none;width:46px;height:24px;border-radius:12px;background:#1a0f08;box-shadow:inset 0 2px 4px #000;position:relative;transition:background .2s}
 .lever i::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff3c4,#c9993f 50%,#6a4a1a);transition:left .2s}
 .lever input:checked+i{background:#1f3a1f}
 .lever input:checked+i::after{left:24px}
-.banner{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:5;max-width:92vw;padding:12px 18px;border-radius:12px;font-size:17px;color:var(--ink);background:linear-gradient(#f6dc98,#c9993f);border:2px solid var(--brass3);box-shadow:0 8px 24px #000c;cursor:pointer;text-align:center}
+.row{display:flex;justify-content:space-between;align-items:baseline;color:#e2cfa6;font-size:15px}
+.row b{color:var(--brass1);font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:10px;border-radius:5px;background:linear-gradient(90deg,#1a0f08,#3a2312);box-shadow:inset 0 2px 4px #000;margin:10px 0 4px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff3c4,#c9993f 50%,#6a4a1a);box-shadow:0 2px 6px #000;cursor:pointer}
+input[type=range]::-moz-range-thumb{width:26px;height:26px;border:none;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff3c4,#c9993f 50%,#6a4a1a);box-shadow:0 2px 6px #000;cursor:pointer}
+.meter{position:relative;height:14px;border-radius:7px;background:#140b05;box-shadow:inset 0 2px 4px #000;overflow:hidden;margin-top:8px}
+#lvl{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:7px;background:linear-gradient(90deg,#6b5a3a,#a08850);transition:width .06s linear}
+#lvl.hot{background:linear-gradient(90deg,#2a8a45,#46e070)}
+#gate{position:absolute;top:-2px;bottom:-2px;width:3px;background:#ffd98a;box-shadow:0 0 6px #ffb347}
+.hint{font-size:13px;color:#a8916a;margin-top:8px;line-height:1.4}
+.stack{display:flex;flex-direction:column;gap:12px}
+.banner{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:5;max-width:92vw;padding:12px 18px;border-radius:12px;font-size:16px;font-weight:600;color:var(--ink);background:linear-gradient(#f6dc98,#c9993f);border:2px solid var(--brass3);box-shadow:0 8px 24px #000c;cursor:pointer;text-align:center}
 .banner[hidden]{display:none}
-footer{text-align:center;color:#8a7050;font-size:13px;letter-spacing:1px}
+footer{text-align:center;color:#8a7050;font-size:13px}
 </style>
 </head>
 <body>
 <svg class="gear" id="gearA" viewBox="-120 -120 240 240"><path id="gpA" fill-rule="evenodd"/></svg>
 <svg class="gear" id="gearB" viewBox="-120 -120 240 240"><path id="gpB" fill-rule="evenodd"/></svg>
 <div class="app">
-  <h1>Ladička</h1>
-  <div class="sub">⚙ parní ladicí přístroj ⚙</div>
+  <h1>Kytarová ladička</h1>
+  <div class="sub">Zahraj jednu strunu a lad, dokud ručička nebude uprostřed.</div>
+
   <div class="plate" id="gplate">
     <i class="rivet tl"></i><i class="rivet tr"></i><i class="rivet bl"></i><i class="rivet br"></i>
     <canvas id="gauge"></canvas>
-    <div class="status" id="status">Startuji mikrofon…</div>
+    <div class="status" id="status">Spouštím mikrofon…</div>
     <div class="zoom" id="zoom">
-      <span>Lupa</span>
+      <span>Přiblížení:</span>
       <button class="btn" data-z="50">±50</button>
       <button class="btn" data-z="20">±20</button>
       <button class="btn" data-z="10">±10</button>
       <button class="btn" data-z="auto">Auto</button>
     </div>
   </div>
+
   <div class="plate">
     <i class="rivet tl"></i><i class="rivet tr"></i><i class="rivet bl"></i><i class="rivet br"></i>
-    <div class="label">Seismograf odchylky</div>
-    <div class="tape"><canvas id="hist"></canvas></div>
-  </div>
-  <div class="plate">
-    <i class="rivet tl"></i><i class="rivet tr"></i><i class="rivet bl"></i><i class="rivet br"></i>
-    <div class="label">Struny · klepnutím zazní referenční tón</div>
+    <h2>Struny</h2>
     <div class="pegs" id="pegs"></div>
-    <div class="controls">
-      <div class="sel"><select id="tuning" aria-label="Ladění"></select></div>
-      <div class="sel"><select id="a4" aria-label="Kalibrace A4"></select></div>
-      <label class="lever"><input type="checkbox" id="autoStr" checked><i></i>Auto struna</label>
+    <div class="grid">
+      <label class="field">Ladění<div class="sel"><select id="tuning"></select></div></label>
+      <label class="field">Referenční A4<div class="sel"><select id="a4"></select></div></label>
+      <label class="lever field wide" style="flex-direction:row"><input type="checkbox" id="autoStr" checked><i></i>Automaticky poznat strunu</label>
     </div>
   </div>
-  <footer>Klávesy 1–6 vybírají strunu · Z přepíná lupu</footer>
+
+  <div class="plate">
+    <i class="rivet tl"></i><i class="rivet tr"></i><i class="rivet bl"></i><i class="rivet br"></i>
+    <h2>Mikrofon</h2>
+    <div class="stack">
+      <label class="field">Vstup<div class="sel"><select id="device"><option>Výchozí mikrofon</option></select></div></label>
+      <div>
+        <div class="row"><span>Citlivost</span><b id="sensVal">60 %</b></div>
+        <input type="range" id="sens" min="0" max="100" value="60" aria-label="Citlivost mikrofonu">
+        <div class="meter" title="Hlasitost vstupu"><div id="lvl"></div><div id="gate"></div></div>
+        <div class="hint">Lišta ukazuje, jak hlasitě ladička kytaru slyší. Když při hraní nepřejde za žlutou značku, posuň citlivost doprava. Když ladička reaguje na hluk v místnosti, posuň ji doleva.</div>
+      </div>
+      <label class="lever"><input type="checkbox" id="agc"><i></i>Automatické zesílení prohlížeče</label>
+    </div>
+  </div>
+
+  <div class="plate">
+    <i class="rivet tl"></i><i class="rivet tr"></i><i class="rivet bl"></i><i class="rivet br"></i>
+    <h2>Průběh ladění</h2>
+    <div class="tape"><canvas id="hist"></canvas></div>
+  </div>
+
+  <footer>Klepnutím na strunu přehraješ její tón · klávesy 1–6 vybírají strunu · Z mění přiblížení</footer>
 </div>
 <div class="banner" id="banner" hidden></div>
+
 <script>
 const NOTES=['C','C#','D','D#','E','F','F#','G','G#','A','A#','H'];
 const TUNINGS={
-  'Standard E A D G H E':['E2','A2','D3','G3','H3','E4'],
+  'Standardní (E A D G H E)':['E2','A2','D3','G3','H3','E4'],
   'Drop D':['D2','A2','D3','G3','H3','E4'],
   'DADGAD':['D2','A2','D3','G3','A3','D4'],
   'Open G':['D2','G2','D3','G3','H3','D4'],
   'Open D':['D2','A2','D3','F#3','A3','D4'],
-  'Půltón dolů':['D#2','G#2','C#3','F#3','A#3','D#4'],
-  'Celý tón dolů':['D2','G2','C3','F3','A3','D4']
+  'O půltón níž':['D#2','G#2','C#3','F#3','A#3','D#4'],
+  'O celý tón níž':['D2','G2','C3','F3','A3','D4'],
+  'Drop C':['C2','G2','C3','F3','A3','D4']
 };
+const F='system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif';
 const TAU=Math.PI*2, SW=Math.PI*0.75, TOL=3, C=250;
 const $=id=>document.getElementById(id);
-let A4=440, ctx=null, analyser=null, buf=null, starting=false;
-let selected=0, smoothF=0, needle=-1.12, vel=0, range=50, zoomMode='auto', absEma=50;
-let history=[], done=new Set(), inTuneSince=0, lastHeard=-1e9, gearRot=0, tapeScroll=0, lastStatus='';
-let disp={note:'—',oct:'',hz:0,cents:null,target:''};
 
-// ---------- nastavení ----------
+let A4=440, ctx=null, analyser=null, gainNode=null, src=null, stream=null, buf=null, starting=false;
+let selected=0, smoothF=0, recent=[], needle=-1.12, vel=0, range=50, zoomMode='auto', absEma=50;
+let history=[], done=new Set(), inTuneSince=0, lastHeard=-1e9, gearRot=0, tapeScroll=0, lastStatus='';
+let level=0, noiseFloor=0.002, weakSince=0, weak=false;
+let disp={note:'',oct:'',hz:0,cents:null,target:''};
+
+/* ---------- nastavení ---------- */
 for(const t in TUNINGS) $('tuning').add(new Option(t,t));
-for(let f=430;f<=450;f++) $('a4').add(new Option('A4 = '+f+' Hz',f));
-function loadPrefs(){try{const p=JSON.parse(localStorage.getItem('ladicka')||'{}');
-  if(p.tuning&&TUNINGS[p.tuning])$('tuning').value=p.tuning;
-  if(p.a4)A4=+p.a4; if(p.zoom)zoomMode=p.zoom; if(p.auto===false)$('autoStr').checked=false;}catch(e){}
-  $('a4').value=A4;}
-function savePrefs(){try{localStorage.setItem('ladicka',JSON.stringify({tuning:$('tuning').value,a4:A4,zoom:zoomMode,auto:$('autoStr').checked}))}catch(e){}}
+for(let f=430;f<=450;f++) $('a4').add(new Option(f+' Hz',f));
+function loadPrefs(){
+  try{const p=JSON.parse(localStorage.getItem('ladicka')||'{}');
+    if(p.tuning&&TUNINGS[p.tuning])$('tuning').value=p.tuning;
+    if(p.a4)A4=+p.a4; if(p.zoom)zoomMode=p.zoom;
+    if(p.auto===false)$('autoStr').checked=false;
+    if(p.sens!=null)$('sens').value=p.sens;
+    if(p.agc)$('agc').checked=true;
+  }catch(e){}
+  $('a4').value=A4; showSens();
+}
+function savePrefs(){try{localStorage.setItem('ladicka',JSON.stringify({tuning:$('tuning').value,a4:A4,zoom:zoomMode,auto:$('autoStr').checked,sens:+$('sens').value,agc:$('agc').checked,device:$('device').value}))}catch(e){}}
+function savedDevice(){try{return JSON.parse(localStorage.getItem('ladicka')||'{}').device||''}catch(e){return ''}}
+
 const midiOf=n=>{const m=n.match(/^([A-H]#?)(\d)$/);return NOTES.indexOf(m[1])+12*(+m[2]+1)};
 const freqOf=m=>A4*Math.pow(2,(m-69)/12);
 const tuning=()=>TUNINGS[$('tuning').value];
 
-// ---------- kolíky strun ----------
-function buildPegs(){const box=$('pegs');box.innerHTML='';
-  tuning().forEach((n,i)=>{const b=document.createElement('button');b.className='peg';b.textContent=n.replace(/\d/,'');
-    b.title=n;b.onclick=()=>{selected=i;$('autoStr').checked=false;savePrefs();playRef(i);updatePegs()};box.appendChild(b)});
-  updatePegs();}
+/* citlivost 0–100 % → zesílení 0,5× až 60× */
+const sensGain=v=>0.5*Math.pow(120,v/100);
+/* práh signálu: s vyšší citlivostí je ladička ochotnější reagovat i na slabší tón */
+const gateRms=()=>Math.max(0.006,noiseFloor*2.2)*(1.6-+$('sens').value/100);
+function showSens(){const v=+$('sens').value;$('sensVal').textContent=v+' %';if(gainNode)gainNode.gain.setTargetAtTime(sensGain(v),ctx.currentTime,0.05)}
+$('sens').oninput=()=>{showSens();savePrefs()};
+$('agc').onchange=()=>{savePrefs();restartMic()};
+$('device').onchange=()=>{savePrefs();restartMic()};
+
+/* ---------- struny ---------- */
+function buildPegs(){
+  const box=$('pegs');box.innerHTML='';
+  tuning().forEach((n,i)=>{
+    const b=document.createElement('button');b.className='peg';
+    b.innerHTML=n.replace(/\d/,'')+'<small>'+(6-i)+'</small>';
+    b.title='Přehrát tón '+n;
+    b.onclick=()=>{selected=i;$('autoStr').checked=false;savePrefs();playRef(i);updatePegs()};
+    box.appendChild(b);
+  });
+  updatePegs();
+}
 function updatePegs(){[...$('pegs').children].forEach((b,i)=>{b.classList.toggle('active',i===selected);b.classList.toggle('done',done.has(i))})}
 function puff(i){const b=$('pegs').children[i];if(!b)return;b.classList.remove('steam');void b.offsetWidth;b.classList.add('steam');setTimeout(()=>b.classList.remove('steam'),1400)}
 $('tuning').onchange=()=>{done.clear();selected=0;buildPegs();savePrefs()};
 $('a4').onchange=e=>{A4=+e.target.value;savePrefs()};
 $('autoStr').onchange=savePrefs;
-function setZoom(z){zoomMode=z;[...document.querySelectorAll('#zoom .btn')].forEach(b=>b.classList.toggle('on',b.dataset.z===z));savePrefs()}
+function setZoom(z){zoomMode=z;document.querySelectorAll('#zoom .btn').forEach(b=>b.classList.toggle('on',b.dataset.z===z));savePrefs()}
 document.querySelectorAll('#zoom .btn').forEach(b=>b.onclick=()=>setZoom(b.dataset.z));
 document.addEventListener('keydown',e=>{
-  if(e.key>='1'&&e.key<='6'){selected=+e.key-1;$('autoStr').checked=false;updatePegs();savePrefs()}
+  if(e.target.tagName==='SELECT'||e.target.tagName==='INPUT')return;
+  if(e.key>='1'&&e.key<='6'){selected=6-(+e.key);$('autoStr').checked=false;updatePegs();savePrefs()}
   if(e.key==='z'||e.key==='Z'){const o=['auto','50','20','10'];setZoom(o[(o.indexOf(zoomMode)+1)%o.length])}
 });
 
-// ---------- zvuk ----------
+/* ---------- zvuk ---------- */
 function ensureCtx(){if(!ctx){ctx=new (window.AudioContext||window.webkitAudioContext)();ctx.onstatechange=updateBanner}return ctx}
-function playRef(i){const c=ensureCtx();c.resume();const f=freqOf(midiOf(tuning()[i])),t=c.currentTime,g=c.createGain();
+function playRef(i){
+  const c=ensureCtx();c.resume();
+  const f=freqOf(midiOf(tuning()[i])),t=c.currentTime,g=c.createGain();
   g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.3,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+2.5);g.connect(c.destination);
-  [1,2,3,4].forEach((h,k)=>{const o=c.createOscillator();o.type=k?'sine':'triangle';o.frequency.value=f*h;const gg=c.createGain();gg.gain.value=1/(h*h);o.connect(gg).connect(g);o.start(t);o.stop(t+2.6)})}
+  [1,2,3,4].forEach((h,k)=>{const o=c.createOscillator();o.type=k?'sine':'triangle';o.frequency.value=f*h;const gg=c.createGain();gg.gain.value=1/(h*h);o.connect(gg).connect(g);o.start(t);o.stop(t+2.6)});
+}
 async function startMic(){
-  if(starting||analyser)return; starting=true;
+  if(starting)return; starting=true;
   try{
     ensureCtx();
-    const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
-    const src=ctx.createMediaStreamSource(stream);
-    const hp=ctx.createBiquadFilter();hp.type='highpass';hp.frequency.value=55;
-    const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1500;
-    analyser=ctx.createAnalyser();analyser.fftSize=4096;buf=new Float32Array(analyser.fftSize);
-    src.connect(hp).connect(lp).connect(analyser);
+    const cons={echoCancellation:false,noiseSuppression:false,autoGainControl:$('agc').checked};
+    const dev=$('device').value||savedDevice();
+    if(dev&&dev!=='Výchozí mikrofon')cons.deviceId={ideal:dev};
+    const s=await navigator.mediaDevices.getUserMedia({audio:cons});
+    if(stream)stream.getTracks().forEach(t=>t.stop());
+    if(src)src.disconnect();
+    stream=s;
+    if(!analyser){
+      gainNode=ctx.createGain();gainNode.gain.value=sensGain(+$('sens').value);
+      const hp=ctx.createBiquadFilter();hp.type='highpass';hp.frequency.value=55;
+      const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1400;
+      analyser=ctx.createAnalyser();analyser.fftSize=4096;buf=new Float32Array(analyser.fftSize);
+      gainNode.connect(hp).connect(lp).connect(analyser);
+    }
+    src=ctx.createMediaStreamSource(stream);src.connect(gainNode);
     try{await ctx.resume()}catch(e){}
+    listDevices();
   }catch(e){
-    showBanner(e&&e.name==='NotAllowedError'?'🔒 Povol mikrofon v prohlížeči a klepni sem':'Mikrofon nenalezen – klepni pro nový pokus');
+    showBanner(e&&e.name==='NotAllowedError'?'Povol mikrofon v prohlížeči a klepni sem':'Mikrofon se nepodařilo spustit, klepni pro nový pokus');
   }
   starting=false; updateBanner();
+}
+function restartMic(){if(stream)startMic()}
+async function listDevices(){
+  try{
+    const devs=(await navigator.mediaDevices.enumerateDevices()).filter(d=>d.kind==='audioinput');
+    const cur=stream&&stream.getAudioTracks()[0].getSettings().deviceId;
+    const sel=$('device');sel.innerHTML='';
+    devs.forEach((d,i)=>sel.add(new Option(d.label||('Mikrofon '+(i+1)),d.deviceId)));
+    if(!devs.length)sel.add(new Option('Výchozí mikrofon',''));
+    if(cur)sel.value=cur;
+  }catch(e){}
 }
 function showBanner(t){$('banner').textContent=t;$('banner').hidden=false}
 function updateBanner(){
   if(analyser&&ctx.state==='running'){$('banner').hidden=true;return}
-  if(analyser)showBanner('⚙ Klepni kamkoliv a stroj se rozběhne');
+  if(analyser)showBanner('Klepni kamkoliv a ladička začne poslouchat');
 }
-// prohlížeč někdy pustí zvuk až po prvním dotyku – stačí klepnout kamkoliv
 ['pointerdown','touchend','click','keydown'].forEach(ev=>document.addEventListener(ev,()=>{
   if(!analyser){startMic();return}
   if(ctx.state!=='running')ctx.resume().then(updateBanner);
 },{passive:true}));
+$('banner').onclick=()=>{if(!analyser)startMic()};
 
-// ---------- detekce výšky (YIN) ----------
+/* ---------- rozpoznání tónu (YIN) ---------- */
 let dBuf=null;
 function yin(b,sr){
-  let rms=0;for(let i=0;i<b.length;i++)rms+=b[i]*b[i];
-  if(Math.sqrt(rms/b.length)<0.008)return -1;
-  const N=b.length>>1, maxT=Math.min(N-2,Math.floor(sr/60)), minT=Math.floor(sr/1300);
+  const N=b.length>>1, maxT=Math.min(N-2,Math.floor(sr/60)), minT=Math.max(2,Math.floor(sr/1300));
   if(!dBuf||dBuf.length<maxT+2)dBuf=new Float32Array(maxT+2);
   const d=dBuf;
   for(let t=1;t<=maxT+1;t++){let s=0;for(let i=0;i<N;i++){const x=b[i]-b[i+t];s+=x*x}d[t]=s}
   d[0]=1;let run=0;
   for(let t=1;t<=maxT+1;t++){run+=d[t];d[t]=run?d[t]*t/run:1}
   let tau=-1;
-  for(let t=minT;t<=maxT;t++){if(d[t]<0.12){while(t+1<=maxT&&d[t+1]<d[t])t++;tau=t;break}}
-  if(tau<1)return -1;
+  for(let t=minT;t<=maxT;t++){if(d[t]<0.15){while(t+1<=maxT&&d[t+1]<d[t])t++;tau=t;break}}
+  if(tau<0){let best=minT;for(let t=minT;t<=maxT;t++)if(d[t]<d[best])best=t;if(d[best]<0.3)tau=best}
+  if(tau<0)return -1;
   const a=d[tau-1],c=d[tau],e=d[tau+1],den=a-2*c+e;
   return sr/(den?tau+(a-e)/(2*den):tau);
 }
+function median(a){const s=[...a].sort((x,y)=>x-y);return s[s.length>>1]}
+
 function listen(now){
-  if(!analyser||ctx.state!=='running')return;
+  if(!analyser||ctx.state!=='running'){level=0;return}
   analyser.getFloatTimeDomainData(buf);
-  const f=yin(buf,ctx.sampleRate);
+  let rms=0;for(let i=0;i<buf.length;i++)rms+=buf[i]*buf[i];rms=Math.sqrt(rms/buf.length);
+  level=rms;
+  const gate=gateRms();
+  const f=rms>gate?yin(buf,ctx.sampleRate):-1;
   if(f>60&&f<1300){
-    lastHeard=now;
-    smoothF=(smoothF&&Math.abs(f-smoothF)/smoothF<0.04)?smoothF*0.82+f*0.18:f;
+    lastHeard=now;weakSince=0;weak=false;
+    recent.push(f);if(recent.length>5)recent.shift();
+    const mf=median(recent);
+    smoothF=(smoothF&&Math.abs(mf-smoothF)/smoothF<0.03)?smoothF*0.8+mf*0.2:mf;
     const t=tuning();
-    if($('autoStr').checked){let best=selected,bd=1e9;
+    if($('autoStr').checked){
+      let best=selected,bd=1e9;
       t.forEach((n,i)=>{const dd=Math.abs(1200*Math.log2(smoothF/freqOf(midiOf(n))));if(dd<bd){bd=dd;best=i}});
-      if(best!==selected){selected=best;updatePegs()}}
+      if(best!==selected){selected=best;updatePegs()}
+    }
     const cents=1200*Math.log2(smoothF/freqOf(midiOf(t[selected])));
     const m=Math.round(12*Math.log2(smoothF/A4)+69);
     disp={note:NOTES[((m%12)+12)%12],oct:Math.floor(m/12)-1,hz:smoothF,cents,target:t[selected]};
@@ -210,22 +304,29 @@ function listen(now){
     }else inTuneSince=0;
     history.push(cents);
   }else{
+    /* hluk v místnosti se průběžně měří, ať ladička nereaguje na šum */
+    noiseFloor=noiseFloor*0.995+Math.min(rms,0.05)*0.005;
+    /* slabý signál: něco slyší, ale pod prahem */
+    if(rms>gate*0.35&&rms<gate&&now-lastHeard>1000){if(!weakSince)weakSince=now;weak=now-weakSince>600}else{weakSince=0;weak=false}
     history.push(null);
-    if(now-lastHeard>1500&&disp.cents!==null){disp={note:'—',oct:'',hz:0,cents:null,target:''};smoothF=0;inTuneSince=0;absEma=50}
+    if(now-lastHeard>1500&&disp.cents!==null){disp={note:'',oct:'',hz:0,cents:null,target:''};smoothF=0;recent=[];inTuneSince=0;absEma=50}
   }
   if(history.length>240)history.shift();
   tapeScroll=(tapeScroll+1)%20;
 }
 
-// ---------- kreslení ----------
+/* ---------- kreslení ---------- */
 const gc=$('gauge'),g=gc.getContext('2d'),st=document.createElement('canvas');
 const hc=$('hist'),hg=hc.getContext('2d');
 let S=1,HW=300,HDPR=1;
-function gearPath(r,n,h,hole){let d='';const s=TAU/n;
+function gearPath(r,n,h,hole){
+  let d='';const s=TAU/n;
   for(let i=0;i<n;i++){const a=i*s;[[a,r],[a+s*.15,r+h],[a+s*.45,r+h],[a+s*.6,r]].forEach(([q,rr],j)=>{d+=(i===0&&j===0?'M':'L')+(Math.cos(q)*rr).toFixed(2)+' '+(Math.sin(q)*rr).toFixed(2)})}
   d+='Z';const k=hole;d+=`M${k} 0A${k} ${k} 0 1 0 ${-k} 0A${k} ${k} 0 1 0 ${k} 0Z`;
-  for(let i=0;i<5;i++){const a=i*TAU/5+.3,r1=r*.55,r2=r*.8,w=.32;d+=`M${(Math.cos(a-w)*r1).toFixed(1)} ${(Math.sin(a-w)*r1).toFixed(1)}L${(Math.cos(a-w*.7)*r2).toFixed(1)} ${(Math.sin(a-w*.7)*r2).toFixed(1)}L${(Math.cos(a+w*.7)*r2).toFixed(1)} ${(Math.sin(a+w*.7)*r2).toFixed(1)}L${(Math.cos(a+w)*r1).toFixed(1)} ${(Math.sin(a+w)*r1).toFixed(1)}Z`}
-  return d}
+  for(let i=0;i<5;i++){const a=i*TAU/5+.3,r1=r*.55,r2=r*.8,w=.32;
+    d+=`M${(Math.cos(a-w)*r1).toFixed(1)} ${(Math.sin(a-w)*r1).toFixed(1)}L${(Math.cos(a-w*.7)*r2).toFixed(1)} ${(Math.sin(a-w*.7)*r2).toFixed(1)}L${(Math.cos(a+w*.7)*r2).toFixed(1)} ${(Math.sin(a+w*.7)*r2).toFixed(1)}L${(Math.cos(a+w)*r1).toFixed(1)} ${(Math.sin(a+w)*r1).toFixed(1)}Z`}
+  return d;
+}
 $('gpA').setAttribute('d',gearPath(98,20,14,22));
 $('gpB').setAttribute('d',gearPath(96,14,16,26));
 const G1=new Path2D(gearPath(32,14,6,7)), G2=new Path2D(gearPath(18,9,5,5));
@@ -255,12 +356,7 @@ function buildStatic(){
   const vig=c.createRadialGradient(C,C,150,C,C,206);vig.addColorStop(0,'rgba(0,0,0,0)');vig.addColorStop(1,'rgba(40,20,0,.55)');
   c.fillStyle=vig;c.fillRect(0,0,500,500);c.restore();
   c.strokeStyle='#2b1a0e55';c.lineWidth=1;c.beginPath();c.arc(C,C,200,0,TAU);c.stroke();
-  c.fillStyle='#2b1a0ecc';c.font='13px "IM Fell English SC", serif';
-  arcText(c,'✦ ANNO MDCCCLXXXIX ✦',188);
 }
-function arcText(c,txt,r){const ch=[...txt],w=ch.map(x=>c.measureText(x).width+1.5),tot=w.reduce((a,b)=>a+b,0);
-  let a=Math.PI/2+tot/r/2;c.textAlign='center';
-  ch.forEach((x,i)=>{const aa=a-w[i]/r/2;c.save();c.translate(C+Math.cos(aa)*r,C+Math.sin(aa)*r);c.rotate(aa-Math.PI/2);c.fillText(x,0,0);c.restore();a-=w[i]/r})}
 
 function needleShape(){const p=new Path2D();
   p.moveTo(-34,-4.5);p.lineTo(110,-2.2);p.lineTo(123,-7.5);p.lineTo(136,-2);p.lineTo(186,-.6);p.lineTo(191,0);
@@ -279,33 +375,40 @@ function engraved(txt,x,y){g.fillStyle='rgba(255,248,225,.7)';g.fillText(txt,x,y
 function drawGauge(rt){
   g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,gc.width,gc.height);g.drawImage(st,0,0);g.setTransform(S,0,0,S,0,0);
   const R=range,clampV=v=>Math.max(-R,Math.min(R,v));
-  g.fillStyle='rgba(59,36,16,.17)';
+  g.fillStyle='rgba(59,36,16,.15)';
   g.save();g.translate(C,150);g.rotate(gearRot);g.fill(G1,'evenodd');g.restore();
   g.save();g.translate(C+46,182);g.rotate(-gearRot*14/9+.2);g.fill(G2,'evenodd');g.restore();
   const zone=(a,b,col)=>{g.beginPath();g.arc(C,C,190,ang(clampV(a)/R),ang(clampV(b)/R));g.strokeStyle=col;g.lineWidth=9;g.stroke()};
   g.lineCap='butt';
   zone(-R,R,'rgba(140,28,19,.5)');zone(-15,15,'rgba(214,140,40,.65)');zone(-TOL,TOL,'rgba(40,150,60,.85)');
   const major=R>30?10:R>14?5:2,minor=major/5,n=Math.floor(R/minor+1e-6);
-  g.textAlign='center';g.textBaseline='middle';g.font='16px "Special Elite", monospace';
-  for(let k=-n;k<=n;k++){const v=k*minor,a=ang(v/R),isMaj=Math.abs(v/major-Math.round(v/major))<1e-6;
+  g.textAlign='center';g.textBaseline='middle';g.font=`600 16px ${F}`;
+  for(let k=-n;k<=n;k++){
+    const v=k*minor,a=ang(v/R),isMaj=Math.abs(v/major-Math.round(v/major))<1e-6;
     const len=k===0?26:isMaj?16:8,cs=Math.cos(a),sn=Math.sin(a);
     g.strokeStyle='#2b1a0e';g.lineWidth=k===0?3.2:isMaj?2.2:1;
     g.beginPath();g.moveTo(C+cs*(200-len),C+sn*(200-len));g.lineTo(C+cs*200,C+sn*200);g.stroke();
-    if(isMaj){const lab=k===0?'0':(v>0?'+':'−')+Math.abs(Math.round(v*10)/10);engraved(lab,C+cs*160,C+sn*160)}}
-  g.font='30px Georgia, serif';engraved('♭',C+Math.cos(ang(-1.0))*128,C+Math.sin(ang(-1.0))*128-6);engraved('♯',C+Math.cos(ang(1.0))*128,C+Math.sin(ang(1.0))*128-6);
-  g.font='13px "IM Fell English SC", serif';engraved('± '+Math.round(rt)+' centů',C,292);
+    if(isMaj){const lab=k===0?'0':(v>0?'+':'−')+Math.abs(Math.round(v*10)/10);engraved(lab,C+cs*160,C+sn*160)}
+  }
+  g.font=`700 15px ${F}`;
+  engraved('nízko',C+Math.cos(ang(-1.0))*132,C+Math.sin(ang(-1.0))*132-10);
+  engraved('vysoko',C+Math.cos(ang(1.0))*132,C+Math.sin(ang(1.0))*132-10);
+  g.font=`500 13px ${F}`;engraved('rozsah ±'+Math.round(rt)+' centů',C,292);
   const lit=disp.cents===null?0:Math.abs(disp.cents)<TOL?2:1;
-  const lc=lit===2?['#eaffef','#46e070','rgba(70,224,112,'] :lit===1?['#fff1d0','#ffb347','rgba(255,179,71,']:['#7a6a55','#3a2a1a','rgba(0,0,0,'];
+  const lc=lit===2?['#eaffef','#46e070','rgba(70,224,112,']:lit===1?['#fff1d0','#ffb347','rgba(255,179,71,']:['#7a6a55','#3a2a1a','rgba(0,0,0,'];
   if(lit){const halo=g.createRadialGradient(C,214,0,C,214,34);halo.addColorStop(0,lc[2]+'.55)');halo.addColorStop(1,lc[2]+'0)');g.fillStyle=halo;g.beginPath();g.arc(C,214,34,0,TAU);g.fill()}
   const bulb=g.createRadialGradient(C-3,211,1,C,214,9);bulb.addColorStop(0,lc[0]);bulb.addColorStop(1,lc[1]);
   g.beginPath();g.arc(C,214,8,0,TAU);g.fillStyle=bulb;g.fill();g.strokeStyle='#7a5420';g.lineWidth=2.5;g.stroke();
   g.textBaseline='alphabetic';
-  if(disp.cents===null){g.font='700 54px "Cinzel Decorative", serif';engraved('—',C,355);g.font='16px "Special Elite", monospace';engraved('čekám na tón',C,388)}
-  else{
-    g.font='700 58px "Cinzel Decorative", serif';const nw=g.measureText(disp.note).width;engraved(disp.note,C-8,352);
-    g.font='20px "Special Elite", monospace';g.textAlign='left';engraved(String(disp.oct),C-8+nw/2+3,356);g.textAlign='center';
-    g.font='17px "Special Elite", monospace';engraved(disp.hz.toFixed(2)+' Hz',C,384);
-    const c=disp.cents;engraved('cíl '+disp.target+'  ·  '+(c>0?'+':c<0?'−':'')+Math.abs(c).toFixed(1)+' ¢',C,406);
+  if(disp.cents===null){
+    g.font=`700 22px ${F}`;engraved('Zahraj strunu',C,358);
+    g.font=`500 14px ${F}`;engraved('cíl: '+tuning()[selected],C,384);
+  }else{
+    g.font=`800 60px ${F}`;const nw=g.measureText(disp.note).width;engraved(disp.note,C-8,354);
+    g.font=`700 20px ${F}`;g.textAlign='left';engraved(String(disp.oct),C-8+nw/2+3,358);g.textAlign='center';
+    g.font=`600 16px ${F}`;engraved(disp.hz.toFixed(1)+' Hz',C,384);
+    const c=disp.cents;
+    g.font=`500 14px ${F}`;engraved('cíl '+disp.target+'  ·  '+(c>0?'+':c<0?'−':'')+Math.abs(c).toFixed(1)+' centů',C,405);
   }
   const a=ang(needle);
   g.save();g.translate(C,C);g.rotate(a);
@@ -339,6 +442,7 @@ function drawTape(){
   const mid=H/2,sc=v=>mid-Math.max(-1,Math.min(1,v/range))*mid*.9;
   hg.fillStyle='rgba(40,150,60,.18)';hg.fillRect(0,sc(TOL),W,sc(-TOL)-sc(TOL));
   hg.strokeStyle='rgba(43,26,14,.55)';hg.beginPath();hg.moveTo(0,mid);hg.lineTo(W,mid);hg.stroke();
+  hg.font=`600 11px ${F}`;hg.fillStyle='rgba(43,26,14,.6)';hg.textAlign='left';hg.textBaseline='top';hg.fillText('vysoko',6,4);hg.textBaseline='bottom';hg.fillText('nízko',6,H-4);
   hg.strokeStyle='#8c1c13';hg.lineWidth=1.8;hg.lineJoin='round';hg.beginPath();
   let pen=false,lx=0,ly=mid;const step=W/240,off=W-(history.length-1)*step;
   history.forEach((v,i)=>{if(v===null){pen=false;return}const x=off+i*step,y=sc(v);pen?hg.lineTo(x,y):hg.moveTo(x,y);pen=true;lx=x;ly=y});
@@ -346,10 +450,25 @@ function drawTape(){
   if(pen){hg.fillStyle='#5a120c';hg.beginPath();hg.arc(lx,ly,3,0,TAU);hg.fill()}
 }
 
+function drawMeter(){
+  const pos=v=>Math.max(0,Math.min(100,(20*Math.log10(Math.max(v,1e-6))+66)/66*100));
+  const gate=gateRms();
+  $('lvl').style.width=pos(level)+'%';
+  $('lvl').classList.toggle('hot',level>gate);
+  $('gate').style.left=pos(gate)+'%';
+}
+
 function setStatus(){
   let txt,cls='';
-  if(disp.cents===null)txt=analyser?'Zahraj strunu…':'Startuji mikrofon…';
-  else{const ac=Math.abs(disp.cents);txt=ac<TOL?'✦ Naladěno ✦':disp.cents<0?'▲ Přitáhni':'▼ Povol';cls=ac<TOL?'ok':ac<15?'near':'far'}
+  if(disp.cents===null){
+    if(!analyser)txt='Spouštím mikrofon…';
+    else if(weak){txt='Slabý signál – zvyš citlivost mikrofonu';cls='weak'}
+    else txt='Poslouchám…';
+  }else{
+    const ac=Math.abs(disp.cents);
+    txt=ac<TOL?'✓ Naladěno':disp.cents<0?'▲ Moc nízko – přitáhni':'▼ Moc vysoko – povol';
+    cls=ac<TOL?'ok':ac<15?'near':'far';
+  }
   const key=txt+cls;if(key===lastStatus)return;lastStatus=key;
   const s=$('status');s.textContent=txt;s.className='status '+cls;$('gplate').classList.toggle('tuned',cls==='ok');
 }
@@ -364,12 +483,11 @@ function frame(now){
   gearRot+=vel*1.6;
   const deg=now*0.004+gearRot*30;
   $('gearA').style.transform=`rotate(${deg}deg)`;$('gearB').style.transform=`rotate(${-deg*20/14}deg)`;
-  drawGauge(rt);drawTape();setStatus();
+  drawGauge(rt);drawTape();drawMeter();setStatus();
   requestAnimationFrame(frame);
 }
 
 loadPrefs();buildPegs();setZoom(zoomMode);fit();
-if(document.fonts)document.fonts.ready.then(fit);
 requestAnimationFrame(frame);
 startMic();
 </script>
